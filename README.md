@@ -8,15 +8,22 @@ docker-compose up -d
 
 - El -d, significa **detached**
 
+## Configurar las variables de entorno
+
+Renombrar el archivo **.env.template** a **.env**
+
 - MongoDB URL Local:
 
 ```
 mongodb://localhost:27017/entriesdb
 ```
 
-## Configurar las variables de entorno
+- Reconstruir los módulos de node y levantar Next
 
-Renombrar el archivo **.env.template** a **.env**
+```
+yarn install
+yarn dev
+```
 
 ## Llenar la base de datos con información de pruebas
 
