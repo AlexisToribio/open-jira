@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useReducer } from 'react';
+import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 
 import { entriesApi } from '../../apis';
@@ -20,6 +21,7 @@ interface Props {
 export const EntriesProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(entriesReducer, Entries_INITIAL_STATE);
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const addNewEntry = async (description: string) => {
     const { data } = await entriesApi.post<Entry>('/entries', { description });
@@ -47,6 +49,7 @@ export const EntriesProvider = ({ children }: Props) => {
             horizontal: 'right',
           },
         });
+      router.push(`/`);
     } catch (error) {
       console.log({ error });
     }
@@ -67,6 +70,7 @@ export const EntriesProvider = ({ children }: Props) => {
             horizontal: 'right',
           },
         });
+      router.push(`/`);
     } catch (error) {
       console.log({ error });
     }
