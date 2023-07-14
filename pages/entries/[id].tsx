@@ -1,5 +1,6 @@
 import { ChangeEvent, useState, useMemo, useContext } from 'react';
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import {
   capitalize,
   Button,
@@ -36,6 +37,7 @@ const EntryPage = ({ entry }: Props) => {
   const [inputValue, setInputValue] = useState(entry.description);
   const [status, setStatus] = useState<EntryStatus>(entry.status);
   const [touched, setTouched] = useState(false);
+  const router = useRouter();
 
   const isNotValid = useMemo(
     () => inputValue.length <= 0 && touched,
@@ -58,10 +60,12 @@ const EntryPage = ({ entry }: Props) => {
       description: inputValue,
     };
     updateEntry(updatedEntry, true);
+    router.push(`/`);
   };
 
   const onDelete = () => {
     deleteEntry(entry, true);
+    router.push(`/`);
   };
 
   return (
