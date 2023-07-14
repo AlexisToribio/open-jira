@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useReducer } from 'react';
+import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 
 import { entriesApi } from '../../apis';
@@ -19,6 +20,7 @@ interface Props {
 
 export const EntriesProvider = ({ children }: Props) => {
   const [state, dispatch] = useReducer(entriesReducer, Entries_INITIAL_STATE);
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
   const addNewEntry = async (description: string) => {
@@ -52,6 +54,27 @@ export const EntriesProvider = ({ children }: Props) => {
     }
   };
 
+  const deleteEntry = async (entry: Entry, showSnackbar = false) => {
+    try {
+      await entriesApi.delete<Entry>(`/entries/${entry._id}`);
+
+      dispatch({ type: '[Entry] Entry-Deleted', payload: entry });
+
+      if (showSnackbar)
+        enqueueSnackbar('Entrada eliminada', {
+          variant: 'success',
+          autoHideDuration: 1500,
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+          },
+        });
+      router.push(`/`);
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
   const refreshEntries = async () => {
     const { data } = await entriesApi.get<Entry[]>('/entries');
     dispatch({ type: '[Entry] Refresh-Data', payload: data });
@@ -68,6 +91,7 @@ export const EntriesProvider = ({ children }: Props) => {
         // Methods
         addNewEntry,
         updateEntry,
+        deleteEntry,
       }}
     >
       {children}

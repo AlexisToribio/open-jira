@@ -32,7 +32,7 @@ interface Props {
 }
 
 const EntryPage = ({ entry }: Props) => {
-  const { updateEntry } = useContext(EntriesContext);
+  const { updateEntry, deleteEntry } = useContext(EntriesContext);
   const [inputValue, setInputValue] = useState(entry.description);
   const [status, setStatus] = useState<EntryStatus>(entry.status);
   const [touched, setTouched] = useState(false);
@@ -58,6 +58,10 @@ const EntryPage = ({ entry }: Props) => {
       description: inputValue,
     };
     updateEntry(updatedEntry, true);
+  };
+
+  const onDelete = () => {
+    deleteEntry(entry, true);
   };
 
   return (
@@ -120,6 +124,7 @@ const EntryPage = ({ entry }: Props) => {
           right: 30,
           backgroundColor: 'error.dark',
         }}
+        onClick={onDelete}
       >
         <DeleteOutlineIcon />
       </IconButton>
